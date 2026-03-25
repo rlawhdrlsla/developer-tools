@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Key, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const SAMPLE = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
 
@@ -11,16 +12,15 @@ function b64Decode(str) {
 }
 
 export default function JwtDecoder() {
+  const { t } = useTranslation();
   const [token, setToken] = useState('');
 
   const result = useMemo(() => {
-    const t = token.trim() || SAMPLE;
-    const parts = t.split('.');
+    const t2 = token.trim() || SAMPLE;
+    const parts = t2.split('.');
     if (parts.length !== 3) return { error: 'JWT must have 3 parts separated by dots.' };
     try {
-      const header  = b64Decode(parts[0]);
-      const payload = b64Decode(parts[1]);
-      return { header, payload, signature: parts[2] };
+      return { header: b64Decode(parts[0]), payload: b64Decode(parts[1]), signature: parts[2] };
     } catch (e) {
       return { error: 'Could not decode token: ' + e.message };
     }
@@ -28,12 +28,10 @@ export default function JwtDecoder() {
 
   function copy(obj) {
     navigator.clipboard.writeText(JSON.stringify(obj, null, 2));
-    toast.success('Copied!');
+    toast.success(t('common.copy') + '!');
   }
 
-  const isExpired = result.payload?.exp
-    ? result.payload.exp * 1000 < Date.now()
-    : null;
+  const isExpired = result.payload?.exp ? result.payload.exp * 1000 < Date.now() : null;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
@@ -42,66 +40,51 @@ export default function JwtDecoder() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-600 to-orange-400 flex items-center justify-center">
             <Key size={16} className="text-white" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-bold text-white">JWT Decoder</h1>
+          <h1 className="text-2xl font-bold text-white">{t('jwt.title')}</h1>
         </div>
-        <p className="text-gray-400 text-sm">Decode and inspect JWT tokens. No secret needed — header and payload only.</p>
+        <p className="text-gray-400 text-sm">{t('jwt.desc')}</p>
       </div>
 
       <div className="card p-5 mb-4">
-        <label className="label">JWT Token</label>
-        <textarea
-          className="textarea h-28 mb-2"
-          placeholder={SAMPLE}
-          value={token}
-          onChange={e => setToken(e.target.value)}
-        />
-        <p className="text-xs text-gray-600">Leave empty to use a sample token.</p>
+        <label className="label">{t('jwt.inputLabel')}</label>
+        <textarea className="textarea h-28 mb-2" placeholder={SAMPLE} value={token} onChange={e => setToken(e.target.value)} />
+        <p className="text-xs text-gray-600">{t('jwt.inputHint')}</p>
       </div>
 
       {result.error ? (
-        <div className="card p-4 border-red-800/40">
-          <p className="text-red-400 text-sm">{result.error}</p>
-        </div>
+        <div className="card p-4"><p className="text-red-400 text-sm">{result.error}</p></div>
       ) : (
         <div className="space-y-3">
-          {/* Status */}
           {isExpired !== null && (
             <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm border ${
-              isExpired
-                ? 'bg-red-900/20 border-red-800/40 text-red-400'
-                : 'bg-green-900/20 border-green-800/40 text-green-400'
+              isExpired ? 'bg-red-900/20 border-red-800/40 text-red-400' : 'bg-green-900/20 border-green-800/40 text-green-400'
             }`}>
-              {isExpired ? 'Token is expired' : 'Token is valid (not expired)'}
-              {result.payload.exp && (
-                <span className="ml-auto text-xs opacity-70">
-                  exp: {new Date(result.payload.exp * 1000).toLocaleString()}
-                </span>
+              {isExpired ? t('jwt.expired') : t('jwt.valid')}
+              {result.payload?.exp && (
+                <span className="ml-auto text-xs opacity-70">exp: {new Date(result.payload.exp * 1000).toLocaleString()}</span>
               )}
             </div>
           )}
 
-          {/* Header */}
           <div className="card p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Header</span>
-              <button onClick={() => copy(result.header)} className="copy-btn flex items-center gap-1"><Copy size={11} /> Copy</button>
+              <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">{t('jwt.header')}</span>
+              <button onClick={() => copy(result.header)} className="copy-btn flex items-center gap-1"><Copy size={11} /> {t('common.copy')}</button>
             </div>
             <pre className="text-sm text-gray-300 font-mono">{JSON.stringify(result.header, null, 2)}</pre>
           </div>
 
-          {/* Payload */}
           <div className="card p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Payload</span>
-              <button onClick={() => copy(result.payload)} className="copy-btn flex items-center gap-1"><Copy size={11} /> Copy</button>
+              <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">{t('jwt.payload')}</span>
+              <button onClick={() => copy(result.payload)} className="copy-btn flex items-center gap-1"><Copy size={11} /> {t('common.copy')}</button>
             </div>
             <pre className="text-sm text-gray-300 font-mono">{JSON.stringify(result.payload, null, 2)}</pre>
           </div>
 
-          {/* Signature */}
           <div className="card p-4">
             <div className="mb-2">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Signature (not verified)</span>
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('jwt.signatureNote')}</span>
             </div>
             <code className="text-sm text-gray-500 font-mono break-all">{(token.trim() || SAMPLE).split('.')[2]}</code>
           </div>

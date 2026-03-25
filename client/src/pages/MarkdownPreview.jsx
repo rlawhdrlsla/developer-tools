@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { FileText, Copy, Eye, Edit3 } from 'lucide-react';
+import { FileText, Copy } from 'lucide-react';
 import { marked } from 'marked';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const SAMPLE = `# Hello, DevKit!
 
@@ -33,8 +34,9 @@ function greet(name) {
 `;
 
 export default function MarkdownPreview() {
+  const { t } = useTranslation();
   const [source, setSource] = useState(SAMPLE);
-  const [tab, setTab] = useState('split'); // edit | preview | split
+  const [tab, setTab] = useState('split');
 
   const html = useMemo(() => {
     marked.setOptions({ gfm: true, breaks: true });
@@ -43,7 +45,7 @@ export default function MarkdownPreview() {
 
   function copySource() {
     navigator.clipboard.writeText(source);
-    toast.success('Copied!');
+    toast.success(t('common.copy') + '!');
   }
 
   const showEdit    = tab === 'edit'    || tab === 'split';
@@ -56,17 +58,16 @@ export default function MarkdownPreview() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-lime-600 to-lime-400 flex items-center justify-center">
             <FileText size={16} className="text-white" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-bold text-white">Markdown Preview</h1>
+          <h1 className="text-2xl font-bold text-white">{t('markdown.title')}</h1>
         </div>
-        <p className="text-gray-400 text-sm">Write Markdown and see a live rendered preview.</p>
+        <p className="text-gray-400 text-sm">{t('markdown.desc')}</p>
       </div>
 
-      {/* Toolbar */}
       <div className="flex items-center gap-2 mb-4">
         {[
-          { id: 'edit', icon: Edit3, label: 'Edit' },
-          { id: 'split', icon: Eye, label: 'Split' },
-          { id: 'preview', icon: Eye, label: 'Preview' },
+          { id: 'edit',    label: t('markdown.edit') },
+          { id: 'split',   label: t('markdown.split') },
+          { id: 'preview', label: t('markdown.preview') },
         ].map(({ id, label }) => (
           <button
             key={id}
@@ -79,27 +80,20 @@ export default function MarkdownPreview() {
           </button>
         ))}
         <button onClick={copySource} className="ml-auto copy-btn flex items-center gap-1">
-          <Copy size={11} /> Copy Markdown
+          <Copy size={11} /> {t('markdown.copyMarkdown')}
         </button>
       </div>
 
       <div className={`grid gap-4 ${tab === 'split' ? 'lg:grid-cols-2' : 'grid-cols-1'}`}>
         {showEdit && (
           <div className="card p-4">
-            <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Markdown</p>
-            <textarea
-              className="textarea w-full"
-              style={{ height: '60vh', minHeight: '400px' }}
-              value={source}
-              onChange={e => setSource(e.target.value)}
-              spellCheck={false}
-            />
+            <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{t('markdown.markdownLabel')}</p>
+            <textarea className="textarea w-full" style={{ height: '60vh', minHeight: '400px' }} value={source} onChange={e => setSource(e.target.value)} spellCheck={false} />
           </div>
         )}
-
         {showPreview && (
           <div className="card p-5">
-            <p className="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">Preview</p>
+            <p className="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">{t('markdown.previewLabel')}</p>
             <div
               className="prose prose-invert prose-sm max-w-none overflow-auto"
               style={{ height: tab === 'split' ? '60vh' : 'auto', minHeight: '400px' }}

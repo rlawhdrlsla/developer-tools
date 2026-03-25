@@ -1,25 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Code2 } from 'lucide-react';
-
-const col1 = [
-  { label: 'JSON Formatter', path: '/json' },
-  { label: 'UUID Generator', path: '/uuid' },
-  { label: 'Hash Generator', path: '/hash' },
-  { label: 'Base64', path: '/base64' },
-  { label: 'Password Generator', path: '/password' },
-  { label: 'Regex Tester', path: '/regex' },
-];
-
-const col2 = [
-  { label: 'Cron Explainer', path: '/cron' },
-  { label: 'URL Encode/Decode', path: '/url-encode' },
-  { label: 'JWT Decoder', path: '/jwt' },
-  { label: 'Diff Checker', path: '/diff' },
-  { label: 'Markdown Preview', path: '/markdown' },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
+  const { t } = useTranslation();
+
+  const col1 = [
+    { label: t('nav.json'),     path: '/json' },
+    { label: t('nav.uuid'),     path: '/uuid' },
+    { label: t('nav.hash'),     path: '/hash' },
+    { label: t('nav.base64'),   path: '/base64' },
+    { label: t('nav.password'), path: '/password' },
+    { label: t('nav.regex'),    path: '/regex' },
+  ];
+
+  const col2 = [
+    { label: t('nav.cron'),      path: '/cron' },
+    { label: t('nav.urlEncode'), path: '/url-encode' },
+    { label: t('nav.jwt'),       path: '/jwt' },
+    { label: t('nav.diff'),      path: '/diff' },
+    { label: t('nav.markdown'),  path: '/markdown' },
+  ];
+
   return (
     <footer className="border-t border-dark-700 bg-dark-900 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
@@ -31,11 +34,11 @@ export default function Footer() {
               </div>
               <span className="font-bold text-white">DevKit</span>
             </Link>
-            <p className="text-sm text-gray-500 leading-relaxed">Free online developer tools. No login, no tracking.</p>
+            <p className="text-sm text-gray-500 leading-relaxed">{t('footer.tagline')}</p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-3 text-sm">Tools</h3>
+            <h3 className="font-semibold text-white mb-3 text-sm">{t('footer.tools')}</h3>
             <ul className="space-y-2">
               {col1.map(l => (
                 <li key={l.path}>
@@ -46,7 +49,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-3 text-sm">More Tools</h3>
+            <h3 className="font-semibold text-white mb-3 text-sm">{t('footer.moreTools')}</h3>
             <ul className="space-y-2">
               {col2.map(l => (
                 <li key={l.path}>
@@ -57,12 +60,12 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-3 text-sm">Company</h3>
+            <h3 className="font-semibold text-white mb-3 text-sm">{t('footer.company')}</h3>
             <ul className="space-y-2">
               {[
-                { label: 'About', path: '/about' },
-                { label: 'Privacy Policy', path: '/privacy' },
-                { label: 'Terms of Service', path: '/terms' },
+                { label: t('footer.about'),   path: '/about' },
+                { label: t('footer.privacy'), path: '/privacy' },
+                { label: t('footer.terms'),   path: '/terms' },
               ].map(l => (
                 <li key={l.path}>
                   <Link to={l.path} className="text-sm text-gray-500 hover:text-cyan-400 transition-colors">{l.label}</Link>
@@ -73,7 +76,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-dark-700 pt-6 text-center">
-          <p className="text-xs text-gray-600">&copy; {new Date().getFullYear()} DevKit. All rights reserved.</p>
+          <p className="text-xs text-gray-600">&copy; {new Date().getFullYear()} DevKit. {t('footer.rights')}</p>
         </div>
       </div>
     </footer>

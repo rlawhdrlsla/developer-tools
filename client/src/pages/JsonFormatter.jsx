@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Code2, Copy, Trash2, Minimize2, Maximize2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function JsonFormatter() {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
@@ -35,7 +37,7 @@ export default function JsonFormatter() {
   function copy() {
     if (!output) return;
     navigator.clipboard.writeText(output);
-    toast.success('Copied!');
+    toast.success(t('common.copy') + '!');
   }
 
   function clear() {
@@ -51,29 +53,28 @@ export default function JsonFormatter() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-600 to-cyan-400 flex items-center justify-center">
             <Code2 size={16} className="text-white" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-bold text-white">JSON Formatter</h1>
+          <h1 className="text-2xl font-bold text-white">{t('json.title')}</h1>
         </div>
-        <p className="text-gray-400 text-sm">Format, minify, and validate your JSON data.</p>
+        <p className="text-gray-400 text-sm">{t('json.desc')}</p>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4">
-        {/* Input */}
         <div className="card p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-300">Input</span>
+            <span className="text-sm font-medium text-gray-300">{t('common.input')}</span>
             <button onClick={clear} className="copy-btn flex items-center gap-1.5">
-              <Trash2 size={12} /> Clear
+              <Trash2 size={12} /> {t('common.clear')}
             </button>
           </div>
           <textarea
             className="textarea h-80"
-            placeholder='Paste your JSON here...\n\n{"name": "John", "age": 30}'
+            placeholder={t('json.inputPlaceholder')}
             value={input}
             onChange={e => setInput(e.target.value)}
           />
           <div className="flex items-center gap-2 mt-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">Indent:</span>
+              <span className="text-xs text-gray-500">{t('json.indent')}:</span>
               {[2, 4].map(n => (
                 <button
                   key={n}
@@ -87,20 +88,19 @@ export default function JsonFormatter() {
               ))}
             </div>
             <button onClick={format} className="btn-primary py-2 px-4 flex items-center gap-1.5">
-              <Maximize2 size={14} /> Format
+              <Maximize2 size={14} /> {t('common.format')}
             </button>
             <button onClick={minify} className="btn-secondary flex items-center gap-1.5">
-              <Minimize2 size={14} /> Minify
+              <Minimize2 size={14} /> {t('common.minify')}
             </button>
           </div>
         </div>
 
-        {/* Output */}
         <div className="card p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-300">Output</span>
+            <span className="text-sm font-medium text-gray-300">{t('common.output')}</span>
             <button onClick={copy} className="copy-btn flex items-center gap-1.5">
-              <Copy size={12} /> Copy
+              <Copy size={12} /> {t('common.copy')}
             </button>
           </div>
           {error ? (
@@ -109,13 +109,13 @@ export default function JsonFormatter() {
             </div>
           ) : (
             <pre className="h-80 overflow-auto p-4 bg-dark-700 rounded-xl text-sm text-gray-300 font-mono whitespace-pre-wrap break-words">
-              {output || <span className="text-gray-600">Formatted JSON will appear here...</span>}
+              {output || <span className="text-gray-600">{t('json.outputPlaceholder')}</span>}
             </pre>
           )}
           {output && !error && (
             <div className="mt-3">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-900/30 text-green-400 text-xs border border-green-800/40">
-                Valid JSON
+                {t('json.validJson')}
               </span>
             </div>
           )}

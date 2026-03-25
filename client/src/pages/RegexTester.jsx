@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const EXAMPLES = [
   { label: 'Email', pattern: '[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}', flags: 'g' },
@@ -11,18 +12,18 @@ const EXAMPLES = [
 ];
 
 export default function RegexTester() {
+  const { t } = useTranslation();
   const [pattern, setPattern] = useState('');
   const [flags, setFlags] = useState('g');
   const [testStr, setTestStr] = useState('');
 
   const result = useMemo(() => {
-    if (!pattern || !testStr) return { error: null, matches: [], highlighted: null };
+    if (!pattern || !testStr) return { error: null, matches: [] };
     try {
-      const rx = new RegExp(pattern, flags);
       const matches = [...testStr.matchAll(new RegExp(pattern, flags.includes('g') ? flags : flags + 'g'))];
-      return { error: null, matches, highlighted: null };
+      return { error: null, matches };
     } catch (e) {
-      return { error: e.message, matches: [], highlighted: null };
+      return { error: e.message, matches: [] };
     }
   }, [pattern, flags, testStr]);
 
@@ -40,11 +41,6 @@ export default function RegexTester() {
     setFlags(prev => prev.includes(f) ? prev.replace(f, '') : prev + f);
   }
 
-  function loadExample(ex) {
-    setPattern(ex.pattern);
-    setFlags(ex.flags);
-  }
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
@@ -52,23 +48,22 @@ export default function RegexTester() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-600 to-amber-400 flex items-center justify-center">
             <Search size={16} className="text-white" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-bold text-white">Regex Tester</h1>
+          <h1 className="text-2xl font-bold text-white">{t('regex.title')}</h1>
         </div>
-        <p className="text-gray-400 text-sm">Test regular expressions against text in real time.</p>
+        <p className="text-gray-400 text-sm">{t('regex.desc')}</p>
       </div>
 
-      {/* Examples */}
       <div className="flex flex-wrap gap-2 mb-4">
+        <span className="text-xs text-gray-500 self-center">{t('common.example')}:</span>
         {EXAMPLES.map(ex => (
-          <button key={ex.label} onClick={() => loadExample(ex)} className="copy-btn">{ex.label}</button>
+          <button key={ex.label} onClick={() => { setPattern(ex.pattern); setFlags(ex.flags); }} className="copy-btn">{ex.label}</button>
         ))}
       </div>
 
       <div className="card p-5 mb-4">
-        {/* Pattern + flags */}
         <div className="flex gap-2 mb-4">
           <div className="flex-1">
-            <label className="label">Pattern</label>
+            <label className="label">{t('regex.pattern')}</label>
             <div className="flex items-center bg-dark-700 border border-dark-600 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-cyan-500">
               <span className="px-3 text-gray-500 text-sm">/</span>
               <input
@@ -81,7 +76,7 @@ export default function RegexTester() {
             </div>
           </div>
           <div>
-            <label className="label">Flags</label>
+            <label className="label">{t('regex.flags')}</label>
             <div className="flex gap-1">
               {['g', 'i', 'm'].map(f => (
                 <button
@@ -104,31 +99,25 @@ export default function RegexTester() {
           </div>
         )}
 
-        <label className="label">Test string</label>
-        <textarea
-          className="textarea h-36 mb-4"
-          placeholder="Enter text to test against the pattern..."
-          value={testStr}
-          onChange={e => setTestStr(e.target.value)}
-        />
+        <label className="label">{t('regex.testString')}</label>
+        <textarea className="textarea h-36 mb-4" placeholder={t('regex.testPlaceholder')} value={testStr} onChange={e => setTestStr(e.target.value)} />
 
-        {/* Highlighted output */}
         {testStr && !result.error && (
           <>
-            <label className="label">Result</label>
-            <div
-              className="bg-dark-700 rounded-xl p-4 text-sm font-mono text-gray-300 whitespace-pre-wrap break-words min-h-12"
-              dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-            />
+            <label className="label">{t('regex.resultLabel')}</label>
+            <div className="bg-dark-700 rounded-xl p-4 text-sm font-mono text-gray-300 whitespace-pre-wrap break-words min-h-12" dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
           </>
         )}
       </div>
 
-      {/* Match list */}
       {result.matches.length > 0 && (
         <div className="card p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-semibold text-white">{result.matches.length} match{result.matches.length > 1 ? 'es' : ''}</span>
+            <span className="text-sm font-semibold text-white">
+              {result.matches.length > 1
+                ? t('regex.matchesPlural', { count: result.matches.length })
+                : t('regex.matches', { count: result.matches.length })}
+            </span>
           </div>
           <div className="space-y-1.5 max-h-48 overflow-auto">
             {result.matches.map((m, i) => (

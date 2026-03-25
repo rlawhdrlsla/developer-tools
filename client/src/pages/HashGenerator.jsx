@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Copy, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 async function sha(algorithm, text) {
   const encoder = new TextEncoder();
@@ -11,6 +12,7 @@ async function sha(algorithm, text) {
 }
 
 export default function HashGenerator() {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [hashes, setHashes] = useState({ sha256: '', sha512: '', sha1: '' });
   const [uppercase, setUppercase] = useState(false);
@@ -31,7 +33,7 @@ export default function HashGenerator() {
 
   function copy(val) {
     navigator.clipboard.writeText(val);
-    toast.success('Copied!');
+    toast.success(t('common.copy') + '!');
   }
 
   const rows = [
@@ -47,19 +49,14 @@ export default function HashGenerator() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-violet-400 flex items-center justify-center">
             <Shield size={16} className="text-white" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-bold text-white">Hash Generator</h1>
+          <h1 className="text-2xl font-bold text-white">{t('hash.title')}</h1>
         </div>
-        <p className="text-gray-400 text-sm">Generate SHA-1, SHA-256, and SHA-512 hashes from text.</p>
+        <p className="text-gray-400 text-sm">{t('hash.desc')}</p>
       </div>
 
       <div className="card p-6 mb-4">
-        <label className="label">Input text</label>
-        <textarea
-          className="textarea h-32 mb-4"
-          placeholder="Enter text to hash..."
-          value={input}
-          onChange={e => setInput(e.target.value)}
-        />
+        <label className="label">{t('hash.inputLabel')}</label>
+        <textarea className="textarea h-32 mb-4" placeholder={t('hash.inputPlaceholder')} value={input} onChange={e => setInput(e.target.value)} />
         <div className="flex items-center gap-3 flex-wrap">
           <label className="flex items-center gap-2 cursor-pointer">
             <div
@@ -68,10 +65,10 @@ export default function HashGenerator() {
             >
               <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${uppercase ? 'left-5' : 'left-0.5'}`} />
             </div>
-            <span className="text-sm text-gray-400">Uppercase</span>
+            <span className="text-sm text-gray-400">{t('hash.uppercase')}</span>
           </label>
           <button onClick={generate} className="btn-primary py-2 px-4 flex items-center gap-1.5">
-            <RefreshCw size={14} /> Generate
+            <RefreshCw size={14} /> {t('common.generate')}
           </button>
         </div>
       </div>
@@ -82,7 +79,7 @@ export default function HashGenerator() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{label}</span>
               <button onClick={() => copy(hashes[key])} disabled={!hashes[key]} className="copy-btn flex items-center gap-1 disabled:opacity-30">
-                <Copy size={11} /> Copy
+                <Copy size={11} /> {t('common.copy')}
               </button>
             </div>
             <code className="text-sm text-cyan-300 font-mono break-all leading-relaxed">

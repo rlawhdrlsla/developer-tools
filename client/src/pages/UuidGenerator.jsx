@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Hash, Copy, RefreshCw, Trash2 } from 'lucide-react';
+import { Hash, Copy, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 function generateUUID() {
   return crypto.randomUUID();
 }
 
 export default function UuidGenerator() {
+  const { t } = useTranslation();
   const [uuids, setUuids] = useState([generateUUID()]);
   const [count, setCount] = useState(1);
   const [uppercase, setUppercase] = useState(false);
@@ -18,12 +20,12 @@ export default function UuidGenerator() {
 
   function copyAll() {
     navigator.clipboard.writeText(uuids.join('\n'));
-    toast.success('Copied all!');
+    toast.success(t('common.copyAll') + '!');
   }
 
   function copyOne(uuid) {
     navigator.clipboard.writeText(uuid);
-    toast.success('Copied!');
+    toast.success(t('common.copy') + '!');
   }
 
   return (
@@ -33,23 +35,16 @@ export default function UuidGenerator() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center">
             <Hash size={16} className="text-white" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-bold text-white">UUID Generator</h1>
+          <h1 className="text-2xl font-bold text-white">{t('uuid.title')}</h1>
         </div>
-        <p className="text-gray-400 text-sm">Generate RFC 4122 compliant version 4 UUIDs.</p>
+        <p className="text-gray-400 text-sm">{t('uuid.desc')}</p>
       </div>
 
       <div className="card p-6 mb-4">
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <div className="flex items-center gap-2">
-            <span className="label mb-0">Count:</span>
-            <input
-              type="number"
-              min="1"
-              max="100"
-              value={count}
-              onChange={e => setCount(e.target.value)}
-              className="input w-20 py-2"
-            />
+            <span className="label mb-0">{t('uuid.count')}:</span>
+            <input type="number" min="1" max="100" value={count} onChange={e => setCount(e.target.value)} className="input w-20 py-2" />
           </div>
           <label className="flex items-center gap-2 cursor-pointer">
             <div
@@ -58,14 +53,14 @@ export default function UuidGenerator() {
             >
               <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${uppercase ? 'left-5' : 'left-0.5'}`} />
             </div>
-            <span className="text-sm text-gray-400">Uppercase</span>
+            <span className="text-sm text-gray-400">{t('uuid.uppercase')}</span>
           </label>
           <button onClick={generate} className="btn-primary py-2 px-4 flex items-center gap-1.5">
-            <RefreshCw size={14} /> Generate
+            <RefreshCw size={14} /> {t('common.generate')}
           </button>
           {uuids.length > 1 && (
             <button onClick={copyAll} className="btn-secondary flex items-center gap-1.5">
-              <Copy size={14} /> Copy All
+              <Copy size={14} /> {t('common.copyAll')}
             </button>
           )}
         </div>
@@ -75,7 +70,7 @@ export default function UuidGenerator() {
             <div key={i} className="flex items-center justify-between bg-dark-700 rounded-xl px-4 py-3 gap-3">
               <code className="text-cyan-300 text-sm font-mono flex-1 break-all">{uuid}</code>
               <button onClick={() => copyOne(uuid)} className="copy-btn flex-shrink-0 flex items-center gap-1">
-                <Copy size={11} /> Copy
+                <Copy size={11} /> {t('common.copy')}
               </button>
             </div>
           ))}
@@ -83,11 +78,8 @@ export default function UuidGenerator() {
       </div>
 
       <div className="card p-5">
-        <h2 className="text-sm font-semibold text-white mb-2">About UUID v4</h2>
-        <p className="text-sm text-gray-500 leading-relaxed">
-          UUID v4 (Universally Unique Identifier) uses random or pseudo-random numbers. With 122 bits of randomness,
-          the probability of a collision is astronomically small — approximately 1 in 5.3×10³⁶.
-        </p>
+        <h2 className="text-sm font-semibold text-white mb-2">{t('uuid.about')}</h2>
+        <p className="text-sm text-gray-500 leading-relaxed">{t('uuid.aboutBody')}</p>
       </div>
     </div>
   );

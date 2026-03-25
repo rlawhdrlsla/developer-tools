@@ -1,28 +1,24 @@
 import React, { useState } from 'react';
 import { Link2, Copy, ArrowLeftRight } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function UrlEncodeDecode() {
+  const { t } = useTranslation();
   const [mode, setMode] = useState('encode');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
-  const [encodeType, setEncodeType] = useState('component'); // component | full
+  const [encodeType, setEncodeType] = useState('component');
 
   function process() {
     setError('');
     if (!input.trim()) return;
     try {
       if (mode === 'encode') {
-        const result = encodeType === 'component'
-          ? encodeURIComponent(input)
-          : encodeURI(input);
-        setOutput(result);
+        setOutput(encodeType === 'component' ? encodeURIComponent(input) : encodeURI(input));
       } else {
-        const result = input.includes('%')
-          ? decodeURIComponent(input.replace(/\+/g, ' '))
-          : input;
-        setOutput(result);
+        setOutput(decodeURIComponent(input.replace(/\+/g, ' ')));
       }
     } catch (e) {
       setError('Invalid input: ' + e.message);
@@ -40,7 +36,7 @@ export default function UrlEncodeDecode() {
   function copy() {
     if (!output) return;
     navigator.clipboard.writeText(output);
-    toast.success('Copied!');
+    toast.success(t('common.copy') + '!');
   }
 
   return (
@@ -50,23 +46,22 @@ export default function UrlEncodeDecode() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-teal-400 flex items-center justify-center">
             <Link2 size={16} className="text-white" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-bold text-white">URL Encode / Decode</h1>
+          <h1 className="text-2xl font-bold text-white">{t('urlEncode.title')}</h1>
         </div>
-        <p className="text-gray-400 text-sm">Encode or decode URLs and query string parameters.</p>
+        <p className="text-gray-400 text-sm">{t('urlEncode.desc')}</p>
       </div>
 
       <div className="card p-6">
-        {/* Mode toggle */}
-        <div className="flex items-center gap-2 mb-5">
+        <div className="flex items-center gap-2 mb-5 flex-wrap">
           {['encode', 'decode'].map(m => (
             <button
               key={m}
               onClick={() => { setMode(m); setInput(''); setOutput(''); setError(''); }}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors capitalize ${
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
                 mode === m ? 'bg-cyan-600 text-white' : 'bg-dark-700 text-gray-400 hover:text-white'
               }`}
             >
-              {m}
+              {m === 'encode' ? t('common.encode') : t('common.decode')}
             </button>
           ))}
           {mode === 'encode' && (
@@ -85,21 +80,22 @@ export default function UrlEncodeDecode() {
             </div>
           )}
           {output && (
-            <button onClick={swap} className={`${mode === 'encode' ? '' : 'ml-auto'} btn-secondary flex items-center gap-1.5`}>
-              <ArrowLeftRight size={13} /> Swap
+            <button onClick={swap} className="btn-secondary flex items-center gap-1.5">
+              <ArrowLeftRight size={13} /> {t('common.swap')}
             </button>
           )}
         </div>
 
-        <label className="label">{mode === 'encode' ? 'Text to encode' : 'Encoded URL'}</label>
         <textarea
           className="textarea h-32 mb-4"
-          placeholder={mode === 'encode' ? 'https://example.com/search?q=hello world&lang=한국어' : 'https%3A%2F%2Fexample.com...'}
+          placeholder={mode === 'encode' ? t('urlEncode.encodePlaceholder') : t('urlEncode.decodePlaceholder')}
           value={input}
           onChange={e => setInput(e.target.value)}
         />
 
-        <button onClick={process} className="btn-primary w-full mb-5 capitalize">{mode}</button>
+        <button onClick={process} className="btn-primary w-full mb-5">
+          {mode === 'encode' ? t('common.encode') : t('common.decode')}
+        </button>
 
         {error && (
           <div className="p-3 bg-red-900/20 border border-red-800/50 rounded-xl mb-4">
@@ -110,8 +106,8 @@ export default function UrlEncodeDecode() {
         {output && (
           <>
             <div className="flex items-center justify-between mb-2">
-              <label className="label mb-0">Result</label>
-              <button onClick={copy} className="copy-btn flex items-center gap-1"><Copy size={11} /> Copy</button>
+              <label className="label mb-0">{t('common.result')}</label>
+              <button onClick={copy} className="copy-btn flex items-center gap-1"><Copy size={11} /> {t('common.copy')}</button>
             </div>
             <pre className="bg-dark-700 rounded-xl p-4 text-sm text-cyan-300 font-mono break-all whitespace-pre-wrap">{output}</pre>
           </>
