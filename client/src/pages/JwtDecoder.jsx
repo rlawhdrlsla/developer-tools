@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Key, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -14,17 +14,18 @@ function b64Decode(str) {
 export default function JwtDecoder() {
   const { t } = useTranslation();
   const [token, setToken] = useState('');
+  useEffect(() => { document.title = `${t('jwt.title')} — DevKit`; }, [t]);
 
   const result = useMemo(() => {
     const t2 = token.trim() || SAMPLE;
     const parts = t2.split('.');
-    if (parts.length !== 3) return { error: 'JWT must have 3 parts separated by dots.' };
+    if (parts.length !== 3) return { error: t('jwt.errorParts') };
     try {
       return { header: b64Decode(parts[0]), payload: b64Decode(parts[1]), signature: parts[2] };
     } catch (e) {
-      return { error: 'Could not decode token: ' + e.message };
+      return { error: t('jwt.errorDecode') + ': ' + e.message };
     }
-  }, [token]);
+  }, [token, t]);
 
   function copy(obj) {
     navigator.clipboard.writeText(JSON.stringify(obj, null, 2));

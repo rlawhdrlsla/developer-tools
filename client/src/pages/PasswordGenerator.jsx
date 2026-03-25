@@ -24,6 +24,7 @@ function generatePassword(length, opts) {
 
 export default function PasswordGenerator() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('password.title')} — DevKit`; }, [t]);
   const [length, setLength] = useState(16);
   const [opts, setOpts] = useState({ upper: true, lower: true, numbers: true, symbols: false });
   const [passwords, setPasswords] = useState(() => [generatePassword(16, { upper: true, lower: true, numbers: true, symbols: false })]);

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Binary, Copy, ArrowLeftRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 export default function Base64Tool() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('base64.title')} — DevKit`; }, [t]);
   const [mode, setMode] = useState('encode');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -15,9 +16,13 @@ export default function Base64Tool() {
     if (!input.trim()) return;
     try {
       if (mode === 'encode') {
-        setOutput(btoa(unescape(encodeURIComponent(input))));
+        const bytes = new TextEncoder().encode(input);
+        const binary = Array.from(bytes, b => String.fromCodePoint(b)).join('');
+        setOutput(btoa(binary));
       } else {
-        setOutput(decodeURIComponent(escape(atob(input.trim()))));
+        const binary = atob(input.trim());
+        const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+        setOutput(new TextDecoder().decode(bytes));
       }
     } catch {
       setError(mode === 'decode' ? t('base64.invalidError') : 'Encoding failed.');

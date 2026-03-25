@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { FileText, Copy } from 'lucide-react';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
@@ -36,11 +37,13 @@ function greet(name) {
 export default function MarkdownPreview() {
   const { t } = useTranslation();
   const [source, setSource] = useState(SAMPLE);
+
+  useEffect(() => { document.title = `${t('markdown.title')} — DevKit`; }, [t]);
   const [tab, setTab] = useState('split');
 
   const html = useMemo(() => {
     marked.setOptions({ gfm: true, breaks: true });
-    return marked.parse(source);
+    return DOMPurify.sanitize(marked.parse(source));
   }, [source]);
 
   function copySource() {

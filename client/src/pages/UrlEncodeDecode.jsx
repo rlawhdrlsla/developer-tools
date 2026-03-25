@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link2, Copy, ArrowLeftRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 export default function UrlEncodeDecode() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('urlEncode.title')} — DevKit`; }, [t]);
   const [mode, setMode] = useState('encode');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');

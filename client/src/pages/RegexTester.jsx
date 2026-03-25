@@ -1,7 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
 const EXAMPLES = [
   { label: 'Email', pattern: '[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}', flags: 'g' },
@@ -13,6 +17,7 @@ const EXAMPLES = [
 
 export default function RegexTester() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('regex.title')} — DevKit`; }, [t]);
   const [pattern, setPattern] = useState('');
   const [flags, setFlags] = useState('g');
   const [testStr, setTestStr] = useState('');
@@ -28,12 +33,22 @@ export default function RegexTester() {
   }, [pattern, flags, testStr]);
 
   const highlightedHtml = useMemo(() => {
-    if (!pattern || !testStr || result.error) return testStr;
+    if (!pattern || !testStr || result.error) return escapeHtml(testStr);
     try {
       const rx = new RegExp(pattern, flags.includes('g') ? flags : flags + 'g');
-      return testStr.replace(rx, match => `<mark class="bg-cyan-500/30 text-cyan-200 rounded px-0.5">${match}</mark>`);
+      const matches = [...testStr.matchAll(rx)];
+      if (!matches.length) return escapeHtml(testStr);
+      let out = '';
+      let last = 0;
+      for (const m of matches) {
+        out += escapeHtml(testStr.slice(last, m.index));
+        out += `<mark class="bg-cyan-500/30 text-cyan-200 rounded px-0.5">${escapeHtml(m[0])}</mark>`;
+        last = m.index + m[0].length;
+      }
+      out += escapeHtml(testStr.slice(last));
+      return out;
     } catch {
-      return testStr;
+      return escapeHtml(testStr);
     }
   }, [pattern, flags, testStr, result.error]);
 

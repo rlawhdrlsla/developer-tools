@@ -151,7 +151,9 @@
     "payload": "Payload",
     "signatureNote": "Signature (not verified)",
     "expired": "Token is expired",
-    "valid": "Token is valid (not expired)"
+    "valid": "Token is valid (not expired)",
+    "errorParts": "JWT must have 3 parts separated by dots.",
+    "errorDecode": "Could not decode token"
   },
   "diff": {
     "title": "Diff Checker",

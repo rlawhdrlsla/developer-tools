@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Shield, Copy, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ async function sha(algorithm, text) {
 
 export default function HashGenerator() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('hash.title')} — DevKit`; }, [t]);
   const [input, setInput] = useState('');
   const [hashes, setHashes] = useState({ sha256: '', sha512: '', sha1: '' });
   const [uppercase, setUppercase] = useState(false);

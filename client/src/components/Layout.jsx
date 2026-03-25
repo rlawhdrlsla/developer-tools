@@ -1,10 +1,14 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
+import AdBanner from './AdBanner.jsx';
 
 export default function Layout() {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   return (
     <div className="min-h-screen flex flex-col">
       <Toaster
@@ -22,7 +26,17 @@ export default function Layout() {
       />
       <Navbar />
       <main className="flex-1">
+        {!isHome && (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-4">
+            <AdBanner slot="top" />
+          </div>
+        )}
         <Outlet />
+        {!isHome && (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-4">
+            <AdBanner slot="bottom" />
+          </div>
+        )}
       </main>
       <Footer />
     </div>

@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { GitCompare } from 'lucide-react';
 import * as Diff from 'diff';
 import { useTranslation } from 'react-i18next';
 
 export default function DiffChecker() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('diff.title')} — DevKit`; }, [t]);
   const [left, setLeft]   = useState('');
   const [right, setRight] = useState('');
   const [mode, setMode]   = useState('words');

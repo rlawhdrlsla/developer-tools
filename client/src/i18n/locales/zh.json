@@ -151,7 +151,9 @@
     "payload": "载荷",
     "signatureNote": "签名（未验证）",
     "expired": "令牌已过期",
-    "valid": "令牌有效（未过期）"
+    "valid": "令牌有效（未过期）",
+    "errorParts": "JWT必须包含3个由点(.)分隔的部分。",
+    "errorDecode": "无法解码令牌"
   },
   "diff": {
     "title": "文本对比",

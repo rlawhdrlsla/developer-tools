@@ -63,6 +63,7 @@ function explain(cron) {
 
 export default function CronExplainer() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('cron.title')} — DevKit`; }, [t]);
   const [cron, setCron] = useState('0 9 * * 1-5');
 
   const result = useMemo(() => explain(cron), [cron]);

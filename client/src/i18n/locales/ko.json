@@ -151,7 +151,9 @@
     "payload": "페이로드",
     "signatureNote": "서명 (검증 불가)",
     "expired": "만료된 토큰이에요",
-    "valid": "유효한 토큰이에요 (만료되지 않음)"
+    "valid": "유효한 토큰이에요 (만료되지 않음)",
+    "errorParts": "JWT는 점(.)으로 구분된 3개 부분이 있어야 해요.",
+    "errorDecode": "토큰을 디코딩할 수 없어요"
   },
   "diff": {
     "title": "텍스트 비교기",

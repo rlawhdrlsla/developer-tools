@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Hash, Copy, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ function generateUUID() {
 
 export default function UuidGenerator() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('uuid.title')} — DevKit`; }, [t]);
   const [uuids, setUuids] = useState([generateUUID()]);
   const [count, setCount] = useState(1);
   const [uppercase, setUppercase] = useState(false);

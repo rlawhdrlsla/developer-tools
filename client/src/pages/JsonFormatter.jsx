@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Code2, Copy, Trash2, Minimize2, Maximize2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 export default function JsonFormatter() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = `${t('json.title')} — DevKit`; }, [t]);
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');

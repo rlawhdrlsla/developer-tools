@@ -4,6 +4,7 @@ import {
   Code2, ArrowRight, Hash, Key, Lock, Search, Clock, Link2, Shield, GitCompare, FileText, Binary
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 const tools = [
   { path: '/json',       icon: Code2,       color: 'from-cyan-600 to-cyan-400',     key: 'json' },
@@ -21,6 +22,7 @@ const tools = [
 
 export default function Home() {
   const { t } = useTranslation();
+  useEffect(() => { document.title = 'DevKit — Free Developer Tools'; }, []);
 
   return (
     <div>
