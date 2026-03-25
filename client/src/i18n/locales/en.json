@@ -200,6 +200,24 @@
     "contactTitle": "Contact",
     "contactBody": "If you have questions, contact us at"
   },
+  "admin": {
+    "title": "DevKit Admin",
+    "loginTitle": "Admin Login",
+    "loginSub": "DevKit Admin Only",
+    "passwordPlaceholder": "Admin password",
+    "loginBtn": "Login",
+    "loggingIn": "Verifying...",
+    "wrongPassword": "Wrong password.",
+    "connectError": "Cannot connect to server.",
+    "refresh": "Refresh",
+    "logout": "Logout",
+    "updated": "Updated:",
+    "totalVisitors": "Total Visitors",
+    "todayVisitors": "Today's Visitors",
+    "dailyChart": "Daily Visitors",
+    "visitors": "Visitors",
+    "days": "d"
+  },
   "terms": {
     "title": "Terms of Service",
     "updated": "Last updated: March 2025",

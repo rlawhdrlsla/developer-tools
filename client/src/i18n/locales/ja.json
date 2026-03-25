@@ -200,6 +200,24 @@
     "contactTitle": "お問い合わせ",
     "contactBody": "ご質問はこちらまでご連絡ください:"
   },
+  "admin": {
+    "title": "DevKit 管理者",
+    "loginTitle": "管理者ログイン",
+    "loginSub": "DevKit 管理者専用",
+    "passwordPlaceholder": "管理者パスワード",
+    "loginBtn": "ログイン",
+    "loggingIn": "確認中...",
+    "wrongPassword": "パスワードが正しくありません。",
+    "connectError": "サーバーに接続できません。",
+    "refresh": "更新",
+    "logout": "ログアウト",
+    "updated": "更新済み:",
+    "totalVisitors": "累計訪問者",
+    "todayVisitors": "本日の訪問者",
+    "dailyChart": "日別訪問者推移",
+    "visitors": "訪問者",
+    "days": "日"
+  },
   "terms": {
     "title": "利用規約",
     "updated": "最終更新: 2025年3月",

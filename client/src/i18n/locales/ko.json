@@ -200,6 +200,24 @@
     "contactTitle": "문의",
     "contactBody": "문의사항이 있으시면 아래 이메일로 연락해주세요:"
   },
+  "admin": {
+    "title": "DevKit 관리자",
+    "loginTitle": "관리자 로그인",
+    "loginSub": "DevKit 관리자 전용",
+    "passwordPlaceholder": "관리자 비밀번호",
+    "loginBtn": "로그인",
+    "loggingIn": "확인 중...",
+    "wrongPassword": "비밀번호가 올바르지 않습니다.",
+    "connectError": "서버에 연결할 수 없습니다.",
+    "refresh": "새로고침",
+    "logout": "로그아웃",
+    "updated": "업데이트:",
+    "totalVisitors": "전체 방문자",
+    "todayVisitors": "오늘 방문자",
+    "dailyChart": "일별 방문자 추이",
+    "visitors": "방문자",
+    "days": "일"
+  },
   "terms": {
     "title": "이용약관",
     "updated": "최종 수정일: 2025년 3월",
