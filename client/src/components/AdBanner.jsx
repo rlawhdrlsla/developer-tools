@@ -1,16 +1,26 @@
-import React from 'react';
+import { useEffect, useRef } from 'react'
 
 export default function AdBanner({ slot = 'top', className = '' }) {
-  const height = slot === 'top' ? 'h-20' : 'h-24';
+  const pushed = useRef(false)
+
+  useEffect(() => {
+    if (pushed.current) return
+    pushed.current = true
+    try {
+      ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+    } catch {}
+  }, [])
+
   return (
-    <div
-      className={`ad-banner ${height} ${className} flex items-center justify-center`}
-      data-ad-slot={slot}
-      aria-label="Advertisement"
-    >
-      <span className="select-none opacity-30 text-xs uppercase tracking-widest text-gray-500">
-        Advertisement
-      </span>
+    <div className={className}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'block' }}
+        data-ad-client="ca-pub-2550387699417589"
+        data-ad-slot="4902846659"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
     </div>
-  );
+  )
 }
